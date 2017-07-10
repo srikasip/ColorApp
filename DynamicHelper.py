@@ -34,14 +34,16 @@ class DynamicHelper:
       ColorObj = colorViewCont()
       handle = "static/color.html"
 
-      data = DynamicHelper.LoadFiles(handle, ColorObj, params)
+      data = DynamicHelper.FetchFiles(handle, ColorObj, params)
       content_type = "text/html"
+
     elif mainPath == "person":
       PersonObj = personViewCont()
       handle = "static/person.html"
 
-      data = DynamicHelper.LoadFiles(handle, PersonObj, params)
+      data = DynamicHelper.FetchFiles(handle, PersonObj, params)
       content_type = "text/html"
+
     elif mainPath == "hold":
       handle = "static/holdPage.html"
       data = au.getFileText(handle)
@@ -49,18 +51,6 @@ class DynamicHelper:
     else:
       data = "<html><head></head><body>This page is not real</body></html>"
       content_type = "text/html"
-
-    # else: 
-    #   if mainPath == "color":
-    #     if params["call"] = "insert":
-    #       ColorObj = colorViewCont()
-    #       handle = "static/color.html"
-
-    #     else:
-    #       data = "<html><head></head><body>Cant Handle Params yet</body></html>"
-    #   else:
-    #     data = "<html><head></head><body>Cant Handle Params yet</body></html>"
-    #   content_type = "text/html"      
 
     return data, content_type
 
@@ -75,6 +65,13 @@ class DynamicHelper:
       if params["call"] == "insert":
         data = sentController.insertOneLoad(params)
         content_type = "text/plain"
+      elif params["call"] == "edit":
+        data = sentController.editOneLoad(params)
+        content_type = "text/plain"
+      elif params["call"] == "delete":
+        idVal = int(params["val"])
+        data, isSuccess = sentController.deleteOne(idVal)
+        content_type = "text/plain"
       else: 
         data = "Nothing to show for myself"
         content_type = "text/plain"      
@@ -83,12 +80,26 @@ class DynamicHelper:
 
 
   @staticmethod
-  def LoadFiles(filehandle, sentController, params):
+  def FetchFiles(filehandle, sentController, params):
     if len(params)<=0:
       htmlSnippet = sentController.viewAll()
     else: 
       if params["call"] == "insert":
         htmlSnippet = sentController.insertOneForm()
+      elif params["call"] == "edit":
+        idVal = int(params["val"])
+        htmlSnippet = sentController.editOneForm(idVal)
+      elif params["call"] == "view":
+        idVal = int(params["val"])
+        htmlSnippet = sentController.viewOneForm(idVal)
+      elif params["call"] == "delete":
+        idVal = int(params["val"])
+        htmlSnippet, isSuccess = sentController.deleteOne(idVal)
+        if isSuccess:
+          htmlSnippet = "<div>Delete Successfully <br/><a href='/color'>Return to Colors</a></div>"
+        else:
+          htmlSnippet = "<div>Delete was Unsuccessful</div>"
+
       else:
         htmlSnippet = "<div>Do not have that yet.</div>"
 

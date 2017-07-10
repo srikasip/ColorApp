@@ -1,0 +1,50 @@
+html, body{
+  height:100%;
+  width:100%;
+  padding:0;
+  margin:0;
+  font-family: "Crimson Text", serif;
+}
+
+.scene{
+  height:100vh;
+  width:100vw;
+}
+h1 {
+  display: inline-block;
+  padding: 16px;
+  text-decoration: none;
+  font-variant: normal;
+  font-style: normal;
+  font-weight: normal;
+  font-size:3.5em;
+}
+
+.full-screen {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.overlay
+{
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:10;
+  background-color:rgba(240,240,240,0.5);
+  height:100%;
+  width:100%;
+}
+
+.scene h1.title
+{
+  text-align: center;
+  display:block;
+}
+.scene:after
+{
+  display: inline-table;
+  content:"";
+  clear:both;
+}

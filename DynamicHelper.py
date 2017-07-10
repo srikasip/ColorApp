@@ -16,27 +16,82 @@ class DynamicHelper:
     self.initiated = True
 
   @staticmethod
-  def GetDynamicContent(mainPath):
-    
+  def PostDynamicContent(mainPath, params):
     if mainPath == "color":
       ColorObj = colorViewCont()
-      handle = "static/color.html"
-
-      data = DynamicHelper.LoadFiles(handle, ColorObj)
-      content_type = "text/html"
+      data, content_type = DynamicHelper.LoadData(ColorObj, params)
     else:
-      data = "<html><head></head><body>This page is not real</body></html>"
-      content_type = "text/html"
-    # else:
-    #   data = DynamicHelper.LoadTemplates("static/home.html")
-      
+      data = "Only Color is handled"
+      content_type = "text/plain"
 
     return data, content_type
 
 
   @staticmethod
-  def LoadFiles(filehandle, sentController):
-    htmlSnippet = sentController.viewAll()
+  def GetDynamicContent(mainPath, params):
+    # if len(params)<= 0:
+    if mainPath == "color":
+      ColorObj = colorViewCont()
+      handle = "static/color.html"
+
+      data = DynamicHelper.LoadFiles(handle, ColorObj, params)
+      content_type = "text/html"
+    elif mainPath == "person":
+      PersonObj = personViewCont()
+      handle = "static/person.html"
+
+      data = DynamicHelper.LoadFiles(handle, PersonObj, params)
+      content_type = "text/html"
+    elif mainPath == "hold":
+      handle = "static/holdPage.html"
+      data = au.getFileText(handle)
+      content_type = "text/html"
+    else:
+      data = "<html><head></head><body>This page is not real</body></html>"
+      content_type = "text/html"
+
+    # else: 
+    #   if mainPath == "color":
+    #     if params["call"] = "insert":
+    #       ColorObj = colorViewCont()
+    #       handle = "static/color.html"
+
+    #     else:
+    #       data = "<html><head></head><body>Cant Handle Params yet</body></html>"
+    #   else:
+    #     data = "<html><head></head><body>Cant Handle Params yet</body></html>"
+    #   content_type = "text/html"      
+
+    return data, content_type
+
+
+  @staticmethod
+  def LoadData(sentController, params):
+    if len(params) <=0:
+      data = "ERROR: No data to laod"
+      content_type = "text/plain"
+    
+    else: 
+      if params["call"] == "insert":
+        data = sentController.insertOneLoad(params)
+        content_type = "text/plain"
+      else: 
+        data = "Nothing to show for myself"
+        content_type = "text/plain"      
+
+    return data, content_type
+
+
+  @staticmethod
+  def LoadFiles(filehandle, sentController, params):
+    if len(params)<=0:
+      htmlSnippet = sentController.viewAll()
+    else: 
+      if params["call"] == "insert":
+        htmlSnippet = sentController.insertOneForm()
+      else:
+        htmlSnippet = "<div>Do not have that yet.</div>"
+
     pageHtml = au.InsertBody(filehandle, htmlSnippet, tagName="body")
 
     return pageHtml

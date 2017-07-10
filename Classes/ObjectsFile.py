@@ -14,9 +14,8 @@ class Color(BASE):
   Person = relation('Person', secondary='personColorfavorite_colorslist')
   
 
-  def __init__(self, color, ada_id, name):
+  def __init__(self, color, name):
     self.color = color
-    self.ada_id = ada_id
     self.name = name
     
 
@@ -37,9 +36,8 @@ class Person(BASE):
   name = Column(String)
   
 
-  def __init__(self, age, ada_id, name):
+  def __init__(self, age, name):
     self.age = age
-    self.ada_id = ada_id
     self.name = name
     
 
@@ -61,9 +59,8 @@ class PersonColorfavorite_colorslist(BASE):
   ada_id = Column(Integer, primary_key = True)
   
 
-  def __init__(self, ada_id):
-    self.ada_id = ada_id
-    
+  def __init__(self):
+    pass    
 
   def __repr__(self):
     repr = ''
@@ -80,14 +77,13 @@ class ColorhashCodeList(BASE):
   hashCode = Column(String)
 
 
-  def __init__(self, ada_id, hashCode):
-    self.ada_id = ada_id
+  def __init__(self, hashCode):
     self.hashCode = hashCode
     
 
   def __repr__(self):
     repr = ''
-    repr += 'ada_id: ' + self.ada_id
+    repr += 'ada_id: ' + str(self.ada_id)
     repr += 'hashCode: ' + self.hashCode
     
     return repr
